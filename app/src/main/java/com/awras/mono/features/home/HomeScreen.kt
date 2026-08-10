@@ -182,7 +182,7 @@ fun HomeScreen(
 
             Button(
                 onClick = {
-                    haptics.heavySnap()
+                    haptics.impact()
                     onExploreClick()
                 },
                 modifier = Modifier

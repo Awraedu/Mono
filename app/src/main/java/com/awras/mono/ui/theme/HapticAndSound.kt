@@ -28,7 +28,7 @@ class TactileFeedback(context: Context) {
         context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    // 1. Apple-Style Micro Tick (For scrolling lists or drag sliders)
+    // 1. Light Tick: Fast, high-frequency "mechanical" switch
     @RequiresPermission(Manifest.permission.VIBRATE)
     fun tick() {
         if (vibrator.hasVibrator()) {
@@ -39,10 +39,10 @@ class TactileFeedback(context: Context) {
                 vibrator.vibrate(10)
             }
         }
-        playSubtleAudioClick()
+        playSynthesizedClick(frequency = 2000.0, durationMs = 5, decayRate = 800.0)
     }
 
-    // 2. Firm Click (For pressing a card or executing an action)
+    // 2. Standard Click: Solid button engagement
     @RequiresPermission(Manifest.permission.VIBRATE)
     fun click() {
         if (vibrator.hasVibrator()) {
@@ -50,39 +50,54 @@ class TactileFeedback(context: Context) {
                 vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
             } else {
                 @Suppress("DEPRECATION")
-                vibrator.vibrate(20)
+                vibrator.vibrate(25)
             }
         }
-        playSubtleAudioClick()
+        playSynthesizedClick(frequency = 1200.0, durationMs = 12, decayRate = 400.0)
     }
 
-    // 3. Heavy Snap Pulse (For level lock, zero-alignment, or timer finish)
+    // 3. Heavy Impact: For major actions or "locking" into state
     @RequiresPermission(Manifest.permission.VIBRATE)
-    fun heavySnap() {
+    fun impact() {
         if (vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
             } else {
                 @Suppress("DEPRECATION")
-                vibrator.vibrate(longArrayOf(0, 15, 10, 15), -1)
+                vibrator.vibrate(longArrayOf(0, 40), -1)
             }
         }
-        playSubtleAudioClick()
+        playSynthesizedClick(frequency = 600.0, durationMs = 25, decayRate = 150.0)
     }
 
-    // 4. Synthesized Mechanical Micro-Sound (Generated in RAM, zero asset latency)
-    fun playSubtleAudioClick() {
+    // 4. Success Pulse: Dual confirmation
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    fun success() {
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 10, 50, 10), -1))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(longArrayOf(0, 10, 50, 10), -1)
+            }
+        }
+        playSynthesizedClick(frequency = 1500.0, durationMs = 10, decayRate = 300.0)
+    }
+
+    private fun playSynthesizedClick(
+        frequency: Double,
+        durationMs: Int,
+        decayRate: Double
+    ) {
         val sampleRate = 44100
-        val durationMs = 8 // Extremely short pulse
         val numSamples = durationMs * sampleRate / 1000
         val sample = DoubleArray(numSamples)
         val buffer = ByteArray(2 * numSamples)
 
-        // Generate a fast 1kHz sine wave pulse that decays quickly
         for (i in 0 until numSamples) {
             val t = i.toDouble() / sampleRate
-            val decay = exp(-t * 500) // Fast exponential drop-off
-            sample[i] = sin(2.0 * Math.PI * 1000.0 * t) * decay
+            val decay = exp(-t * decayRate)
+            sample[i] = sin(2.0 * Math.PI * frequency * t) * decay
         }
 
         var idx = 0
@@ -113,8 +128,6 @@ class TactileFeedback(context: Context) {
 
             audioTrack.write(buffer, 0, buffer.size)
             audioTrack.play()
-        } catch (_: Exception) {
-            // Fallback gracefully if audio hardware is occupied
-        }
+        } catch (_: Exception) {}
     }
 }

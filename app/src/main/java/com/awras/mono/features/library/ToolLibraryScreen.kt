@@ -105,7 +105,7 @@ fun ToolLibraryScreen(
                         trailingIcon = if (searchQuery.isNotEmpty()) {
                             {
                                 IconButton(onClick = { 
-                                    haptics.tick()
+                                    haptics.click()
                                     searchQuery = "" 
                                 }) {
                                     Icon(

@@ -45,7 +45,7 @@ fun ToolCard(
                 color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
             )
             .clickable {
-                haptics.tick()
+                haptics.click()
                 onClick()
             }
             .padding(16.dp)
