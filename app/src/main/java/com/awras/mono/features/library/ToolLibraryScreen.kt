@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.awras.mono.core.ToolManager
+import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import com.awras.mono.ui.components.AppBarButton
 import com.awras.mono.ui.components.ToolCard
@@ -35,7 +36,8 @@ import compose.icons.tablericons.X
 
 @Composable
 fun ToolLibraryScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onToolClick: (Tool) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -212,7 +214,7 @@ fun ToolLibraryScreen(
                         category = tool.category.displayName,
                         title = tool.name,
                         icon = tool.icon,
-                        onClick = { /* TODO: Open Tool */ }
+                        onClick = { onToolClick(tool) }
                     )
                 }
             }

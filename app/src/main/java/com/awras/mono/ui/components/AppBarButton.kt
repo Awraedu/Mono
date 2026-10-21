@@ -33,7 +33,7 @@ fun AppBarButton(
             .padding(horizontal = 4.dp)
             .size(size)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
         IconButton(

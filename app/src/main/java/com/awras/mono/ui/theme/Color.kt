@@ -23,6 +23,7 @@ val TextTertiaryLight = Color(0xFFC7C7CC)    // Low-contrast gray
 // Signal Accents (Single Chromatic Focus)
 val SignalGreen = Color(0xFF10A37F)          // OpenAI signature emerald
 val SignalGreenPulse = Color(0xFF00FF66)     // High-visibility live dot accent
+val SignalOrange = Color(0xFFFF5700)         // Vibrant energetic orange accent
 val SignalError = Color(0xFFFF453A)          // Stark warning red
 
 val DatumDarkColorScheme = darkColorScheme(
@@ -34,7 +35,7 @@ val DatumDarkColorScheme = darkColorScheme(
     primary = TextPrimaryDark,
     secondary = TextSecondaryDark,
     tertiary = TextTertiaryDark,
-    primaryContainer = SignalGreen
+    primaryContainer = SignalOrange
 )
 
 val DatumLightColorScheme = lightColorScheme(
@@ -46,5 +47,5 @@ val DatumLightColorScheme = lightColorScheme(
     primary = TextPrimaryLight,
     secondary = TextSecondaryLight,
     tertiary = TextTertiaryLight,
-    primaryContainer = SignalGreen
+    primaryContainer = SignalOrange
 )

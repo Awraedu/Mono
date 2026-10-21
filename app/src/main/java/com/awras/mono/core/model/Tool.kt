@@ -10,5 +10,5 @@ data class Tool(
     val icon: ImageVector,
     val category: ToolCategory,
     val route: String,
-    val content: @Composable () -> Unit
+    val content: @Composable (onBackClick: () -> Unit) -> Unit
 )

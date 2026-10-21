@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.tabler.icons)
     implementation(libs.lottie.compose)
     testImplementation(libs.junit)
+    implementation("io.github.kyant0:shapes:1.2.1")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)

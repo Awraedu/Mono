@@ -5,18 +5,18 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.awras.mono.core.ToolManager
+import com.awras.mono.core.model.Tool
 import com.awras.mono.ui.components.AppBarButton
 import com.awras.mono.ui.components.ToolCard
 import com.awras.mono.ui.theme.LocalTactileFeedback
@@ -28,11 +28,13 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onExploreClick: () -> Unit
+    onExploreClick: () -> Unit,
+    onToolClick: (Tool) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val isDark = isSystemInDarkTheme()
     val haptics = LocalTactileFeedback.current
+    val tools by ToolManager.tools.collectAsState()
     
     // Header state: 0 = Hi Dagi, 1 = Welcome, 2 = 142 Tools.
     var headerState by remember { mutableIntStateOf(0) }
@@ -113,7 +115,7 @@ fun HomeScreen(
                             accentBrush = Brush.linearGradient(listOf(Color(0xFF8E2DE2), Color(0xFF4A00E0)))
                         )
                         else -> CascadingLetterText(
-                            accent = "142",
+                            accent = "${tools.size}",
                             suffix = " Tools.",
                             accentBrush = Brush.linearGradient(listOf(Color(0xFF10A37F), Color(0xFF00FF66)))
                         )
@@ -142,12 +144,16 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            val rulerTool = remember(tools) { tools.find { it.id == "onscreen-ruler" } }
+            val levelTool = remember(tools) { tools.find { it.id == "spirit-level" } }
+            val converterTool = remember(tools) { tools.find { it.id == "unit-converter" } }
+
             Row(modifier = Modifier.fillMaxWidth()) {
                 ToolCard(
-                    category = "Doc Scanner",
-                    title = "Digitize",
-                    icon = TablerIcons.Scan,
-                    onClick = {},
+                    category = "Measurement",
+                    title = "Ruler",
+                    icon = TablerIcons.Ruler,
+                    onClick = { rulerTool?.let { onToolClick(it) } },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -155,7 +161,7 @@ fun HomeScreen(
                     category = "Spirit Level",
                     title = "Level",
                     icon = TablerIcons.ViewportWide,
-                    onClick = {},
+                    onClick = { levelTool?.let { onToolClick(it) } },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -173,7 +179,7 @@ fun HomeScreen(
                     category = "Unit Scale",
                     title = "Convert",
                     icon = TablerIcons.Exchange,
-                    onClick = {},
+                    onClick = { converterTool?.let { onToolClick(it) } },
                     modifier = Modifier.weight(1f)
                 )
             }
