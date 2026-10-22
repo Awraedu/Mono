@@ -3,7 +3,10 @@ package com.awras.mono.features.tools.vision
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
+import compose.icons.tablericons.ColorSwatch
+import compose.icons.tablericons.FileText
 import compose.icons.tablericons.Qrcode
+import compose.icons.tablericons.Stack
 
 val visionTools = listOf(
     Tool(
@@ -14,5 +17,32 @@ val visionTools = listOf(
         category = ToolCategory.VISION,
         route = "qr_scanner",
         content = { onBackClick -> QrScannerScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "text-extractor",
+        name = "Text Extractor",
+        description = "AI Optical Character Recognition (OCR) from Photos",
+        icon = TablerIcons.FileText,
+        category = ToolCategory.VISION,
+        route = "text_extractor",
+        content = { onBackClick -> TextExtractorScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "object-counter",
+        name = "Object Counter",
+        description = "AI Real-time Object Detection & Tracking Counter",
+        icon = TablerIcons.Stack,
+        category = ToolCategory.VISION,
+        route = "object_counter",
+        content = { onBackClick -> ObjectCounterScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "color-picker",
+        name = "Color Picker",
+        description = "Real-time surface color inspector with Hex & RGB breakdown",
+        icon = TablerIcons.ColorSwatch,
+        category = ToolCategory.VISION,
+        route = "color_picker",
+        content = { onBackClick -> ColorPickerScreen(onBackClick = onBackClick) }
     )
 )

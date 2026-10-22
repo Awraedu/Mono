@@ -53,6 +53,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.4.1")
     implementation("androidx.camera:camera-view:1.4.1")
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.mlkit:object-detection:17.0.2")
     testImplementation(libs.junit)
     implementation("io.github.kyant0:shapes:1.2.1")
     androidTestImplementation(platform(libs.androidx.compose.bom))
