@@ -146,6 +146,7 @@ fun HomeScreen(
 
             val rulerTool = remember(tools) { tools.find { it.id == "onscreen-ruler" } }
             val levelTool = remember(tools) { tools.find { it.id == "spirit-level" } }
+            val metalTool = remember(tools) { tools.find { it.id == "metal-detector" } }
             val converterTool = remember(tools) { tools.find { it.id == "unit-converter" } }
 
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -171,7 +172,7 @@ fun HomeScreen(
                     category = "Detector",
                     title = "Metal",
                     icon = TablerIcons.ToggleLeft,
-                    onClick = {},
+                    onClick = { metalTool?.let { onToolClick(it) } },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(16.dp))

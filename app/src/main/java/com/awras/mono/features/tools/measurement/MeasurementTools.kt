@@ -7,8 +7,10 @@ import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Activity
+import compose.icons.tablericons.Anchor
 import compose.icons.tablericons.Compass
 import compose.icons.tablericons.Ruler
+import compose.icons.tablericons.ToggleLeft
 import compose.icons.tablericons.ViewportWide
 
 val measurementTools = listOf(
@@ -40,6 +42,15 @@ val measurementTools = listOf(
         content = { onBackClick -> AngleScreen(onBackClick = onBackClick) }
     ),
     Tool(
+        id = "plumb-bob",
+        name = "Plumb Bob",
+        description = "Gravity Vertical Alignment & Structure Inspector",
+        icon = TablerIcons.Anchor,
+        category = ToolCategory.MEASUREMENT,
+        route = "plumb_bob",
+        content = { onBackClick -> PlumbBobScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
         id = "seismograph",
         name = "Seismograph",
         description = "Real-time Vibration & Shock Accelerometer Meter",
@@ -47,6 +58,15 @@ val measurementTools = listOf(
         category = ToolCategory.MEASUREMENT,
         route = "seismograph",
         content = { onBackClick -> SeismographScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "metal-detector",
+        name = "Metal Detector",
+        description = "Ferromagnetic Flux Proximity Sensor",
+        icon = TablerIcons.ToggleLeft,
+        category = ToolCategory.MEASUREMENT,
+        route = "metal_detector",
+        content = { onBackClick -> MetalDetectorScreen(onBackClick = onBackClick) }
     ),
     Tool(
         id = "unit-converter",
