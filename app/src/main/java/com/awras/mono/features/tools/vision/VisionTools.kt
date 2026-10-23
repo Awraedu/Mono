@@ -7,6 +7,7 @@ import compose.icons.tablericons.ColorSwatch
 import compose.icons.tablericons.FileText
 import compose.icons.tablericons.Qrcode
 import compose.icons.tablericons.Stack
+import compose.icons.tablericons.Sun
 
 val visionTools = listOf(
     Tool(
@@ -44,5 +45,23 @@ val visionTools = listOf(
         category = ToolCategory.VISION,
         route = "color_picker",
         content = { onBackClick -> ColorPickerScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "document-scanner",
+        name = "Document Scanner",
+        description = "AI Document Scanner with Edge Detection & PDF Export",
+        icon = TablerIcons.FileText,
+        category = ToolCategory.VISION,
+        route = "document_scanner",
+        content = { onBackClick -> DocumentScannerScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "lux-meter",
+        name = "Lux Meter",
+        description = "Precision ambient illuminance meter in Lux & Foot-Candle",
+        icon = TablerIcons.Sun,
+        category = ToolCategory.VISION,
+        route = "lux_meter",
+        content = { onBackClick -> LuxMeterScreen(onBackClick = onBackClick) }
     )
 )
