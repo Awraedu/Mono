@@ -56,6 +56,7 @@ dependencies {
     implementation("com.google.mlkit:text-recognition:16.0.1")
     implementation("com.google.mlkit:object-detection:17.0.2")
     implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
+    implementation("com.google.android.gms:play-services-location:21.4.0")
     testImplementation(libs.junit)
     implementation("io.github.kyant0:shapes:1.2.1")
     androidTestImplementation(platform(libs.androidx.compose.bom))
