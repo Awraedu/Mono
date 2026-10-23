@@ -9,7 +9,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -43,8 +42,6 @@ enum class LightUnit(val symbol: String) {
     LUX("lx"),
     FOOT_CANDLE("fc")
 }
-
-private val VibrantOrange = Color(0xFFFF5700)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
