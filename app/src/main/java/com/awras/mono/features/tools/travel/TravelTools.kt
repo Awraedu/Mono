@@ -24,5 +24,14 @@ val travelTools = listOf(
         category = ToolCategory.TRAVEL,
         route = "compass",
         content = { onBackClick -> CompassScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "altimeter",
+        name = "Altimeter",
+        description = "Precision Sea-Level Elevation, Barometer & DEM Height",
+        icon = TablerIcons.Compass,
+        category = ToolCategory.TRAVEL,
+        route = "altimeter",
+        content = { onBackClick -> AltimeterScreen(onBackClick = onBackClick) }
     )
 )
