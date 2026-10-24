@@ -8,8 +8,8 @@ import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Activity
 import compose.icons.tablericons.Anchor
-import compose.icons.tablericons.Compass
 import compose.icons.tablericons.Ruler
+import compose.icons.tablericons.Ruler2
 import compose.icons.tablericons.ToggleLeft
 import compose.icons.tablericons.ViewportWide
 
@@ -36,7 +36,7 @@ val measurementTools = listOf(
         id = "angle-protractor",
         name = "Protractor",
         description = "Surface Inclinometer & Touch Screen Angle Finder",
-        icon = TablerIcons.Compass,
+        icon = TablerIcons.Ruler2,
         category = ToolCategory.MEASUREMENT,
         route = "angle_protractor",
         content = { onBackClick -> AngleScreen(onBackClick = onBackClick) }

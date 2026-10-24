@@ -3,11 +3,11 @@ package com.awras.mono.features.tools.vision
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
+import compose.icons.tablericons.Bulb
 import compose.icons.tablericons.ColorSwatch
 import compose.icons.tablericons.FileText
 import compose.icons.tablericons.Qrcode
 import compose.icons.tablericons.Stack
-import compose.icons.tablericons.Sun
 
 val visionTools = listOf(
     Tool(
@@ -59,7 +59,7 @@ val visionTools = listOf(
         id = "lux-meter",
         name = "Lux Meter",
         description = "Precision ambient illuminance meter in Lux & Foot-Candle",
-        icon = TablerIcons.Sun,
+        icon = TablerIcons.Bulb,
         category = ToolCategory.VISION,
         route = "lux_meter",
         content = { onBackClick -> LuxMeterScreen(onBackClick = onBackClick) }
