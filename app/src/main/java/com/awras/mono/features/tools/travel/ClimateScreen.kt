@@ -12,6 +12,7 @@ import android.location.Geocoder
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -499,6 +500,7 @@ fun ClimateScreen(
  * Listens to physical phone movement via SensorManager (TYPE_ROTATION_VECTOR)
  * and returns the continuous unwrapped azimuth in degrees.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Composable
 private fun rememberDeviceHeading(): State<Float> {
     val context = LocalContext.current
@@ -511,7 +513,8 @@ private fun rememberDeviceHeading(): State<Float> {
 
         var cumulativeAngle = 0f
 
-        val listener = object : SensorEventListener {
+        val listener = @RequiresApi(Build.VERSION_CODES.CUPCAKE)
+        object : SensorEventListener {
             val rotationMatrix = FloatArray(9)
             val orientation = FloatArray(3)
 
@@ -633,7 +636,6 @@ private fun SectionHeader(title: String, textColor: Color) {
     )
 }
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 private fun HourlyInlineGraph(
     hourly: List<HourlyPoint>,
@@ -642,92 +644,109 @@ private fun HourlyInlineGraph(
     textSecondary: Color,
     accentOrange: Color
 ) {
-    if (hourly.isEmpty()) return
+    val items = hourly.take(5)
+    if (items.isEmpty()) return
 
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        hourly.forEach { h ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = h.time,
-                    fontSize = 13.sp,
-                    color = textSecondary,
-                    fontWeight = if (h.time == "Now") FontWeight.Bold else FontWeight.Normal
-                )
-                Icon(
-                    imageVector = if (h.isDay) TablerIcons.Sun else TablerIcons.Moon,
-                    contentDescription = null,
-                    tint = if (h.isDay) accentOrange else Color(0xFF6B7E93),
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(14.dp))
-
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth().height(42.dp)) {
-        val count = hourly.size
-        val minT = hourly.minOf { it.temp }
-        val maxT = hourly.maxOf { it.temp }
-        val range = (maxT - minT).coerceAtLeast(1).toFloat()
-
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val stepX = size.width / (count - 1)
-            val paddingY = 8.dp.toPx()
-            val usableH = size.height - (paddingY * 2)
-
-            val points = hourly.mapIndexed { idx, item ->
-                val normY = 1f - ((item.temp - minT) / range)
-                Offset(idx * stepX, paddingY + normY * usableH)
-            }
-
-            for (i in 0 until points.size - 1) {
-                val start = Offset(points[i].x + 16.dp.toPx(), points[i].y)
-                val end = Offset(points[i + 1].x - 16.dp.toPx(), points[i + 1].y)
-                if (end.x > start.x) {
-                    drawLine(
-                        color = lineColor,
-                        start = start,
-                        end = end,
-                        strokeWidth = 2.5.dp.toPx(),
-                        cap = StrokeCap.Round
+        // 1. Time Labels
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            items.forEach { h ->
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = h.time,
+                        fontSize = 13.sp,
+                        color = textSecondary,
+                        fontWeight = if (h.time == "Now") FontWeight.Bold else FontWeight.Normal
                     )
                 }
             }
+        }
 
-            if (points.isNotEmpty()) {
-                val last = points.last()
-                drawLine(
-                    color = lineColor,
-                    start = Offset(last.x + 16.dp.toPx(), last.y),
-                    end = Offset(size.width, last.y),
-                    strokeWidth = 2.5.dp.toPx(),
-                    cap = StrokeCap.Round
-                )
+        // 2. Weather Icons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            items.forEach { h ->
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (h.isDay) TablerIcons.Sun else TablerIcons.Moon,
+                        contentDescription = null,
+                        tint = if (h.isDay) accentOrange else Color(0xFF6B7E93),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
 
+        // 3. Temperature Text Labels
         Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            hourly.forEach { h ->
-                val normY = 1f - ((h.temp - minT) / range)
-                val offsetDp = (normY * 18).dp
-                Text(
-                    text = "${h.temp}°",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = textPrimary,
-                    modifier = Modifier.offset(y = offsetDp - 9.dp)
+            items.forEach { h ->
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "${h.temp}°",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textPrimary
+                    )
+                }
+            }
+        }
+
+        // 4. Smooth Continuous Connecting Curve Line
+        val minT = items.minOf { it.temp }
+        val maxT = items.maxOf { it.temp }
+        val range = (maxT - minT).coerceAtLeast(1).toFloat()
+
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(28.dp)
+        ) {
+            val count = items.size
+            val colWidth = size.width / count.toFloat()
+            val paddingY = 6.dp.toPx()
+            val usableH = size.height - (paddingY * 2f)
+
+            val points = items.mapIndexed { idx, item ->
+                val x = (idx + 0.5f) * colWidth
+                val normY = 1f - ((item.temp - minT) / range)
+                Offset(x, paddingY + normY * usableH)
+            }
+
+            // Continuous Smooth Path
+            val curvePath = Path().apply { smoothCurve(points) }
+
+            drawPath(
+                path = curvePath,
+                color = lineColor,
+                style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round)
+            )
+
+            // Joint Dots at each column center
+            points.forEach { pt ->
+                drawCircle(
+                    color = lineColor,
+                    radius = 3.dp.toPx(),
+                    center = pt
                 )
             }
         }
