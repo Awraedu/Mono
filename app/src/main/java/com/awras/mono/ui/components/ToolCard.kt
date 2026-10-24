@@ -42,7 +42,7 @@ fun ToolCard(
             .clip(shape)
             .background(
                 // Use surface with slightly higher contrast
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
+                color = MaterialTheme.colorScheme.surfaceVariant,
             )
             .clickable {
                 haptics.click()

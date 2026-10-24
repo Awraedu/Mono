@@ -211,7 +211,7 @@ fun ToolLibraryScreen(
             ) {
                 items(filteredTools) { tool ->
                     ToolCard(
-                        category = tool.category.displayName,
+                        category = tool.tagline,
                         title = tool.name,
                         icon = tool.icon,
                         onClick = { onToolClick(tool) }

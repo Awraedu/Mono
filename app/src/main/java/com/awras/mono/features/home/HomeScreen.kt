@@ -151,7 +151,7 @@ fun HomeScreen(
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 ToolCard(
-                    category = "Measurement",
+                    category = rulerTool?.tagline ?: "LINEAR SCALE",
                     title = "Ruler",
                     icon = TablerIcons.Ruler,
                     onClick = { rulerTool?.let { onToolClick(it) } },
@@ -159,7 +159,7 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 ToolCard(
-                    category = "Spirit Level",
+                    category = levelTool?.tagline ?: "BULLSEYE LEVEL",
                     title = "Level",
                     icon = TablerIcons.ViewportWide,
                     onClick = { levelTool?.let { onToolClick(it) } },
@@ -169,7 +169,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 ToolCard(
-                    category = "Detector",
+                    category = metalTool?.tagline ?: "MAGNETIC FLUX",
                     title = "Metal",
                     icon = TablerIcons.ToggleLeft,
                     onClick = { metalTool?.let { onToolClick(it) } },
@@ -177,7 +177,7 @@ fun HomeScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 ToolCard(
-                    category = "Unit Scale",
+                    category = converterTool?.tagline ?: "UNIT CONVERTER",
                     title = "Convert",
                     icon = TablerIcons.Exchange,
                     onClick = { converterTool?.let { onToolClick(it) } },
