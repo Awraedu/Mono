@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -317,7 +318,7 @@ fun MetronomeScreen(
             DatumToolTopBar(
                 title = "Metronome",
                 description = "Precision Mechanical Tempo Engine",
-                icon = TablerIcons.Clock,
+                icon = androidx.compose.material.icons.Icons.Default.GraphicEq,
                 onBackClick = onBackClick,
                 rightActionIcon = Icons.Default.Refresh,
                 onRightActionClick = {

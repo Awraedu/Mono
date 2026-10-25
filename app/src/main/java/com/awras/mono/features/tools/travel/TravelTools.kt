@@ -1,11 +1,11 @@
 package com.awras.mono.features.tools.travel
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Terrain
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
-import compose.icons.tablericons.Clock
 import compose.icons.tablericons.Cloud
 import compose.icons.tablericons.Compass
 import compose.icons.tablericons.Language
@@ -67,7 +67,7 @@ val travelTools = listOf(
         name = "Time Zone",
         description = "Global Timezone Inspector & Interactive Time Converter",
         tagline = "GLOBAL TIME",
-        icon = TablerIcons.Clock,
+        icon = Icons.Outlined.Public,
         category = ToolCategory.TRAVEL,
         route = "timezone",
         content = { onBackClick -> TimeZoneScreen(onBackClick = onBackClick) }

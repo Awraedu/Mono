@@ -45,6 +45,10 @@ import com.kyant.capsule.ContinuousCapsule
 import com.kyant.capsule.ContinuousRoundedRectangle
 import compose.icons.TablerIcons
 import compose.icons.tablericons.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.util.UUID
 import java.util.regex.Pattern
 
@@ -98,9 +102,14 @@ fun ClipboardManagerScreen(
     var showAddDialog by remember { mutableStateOf(false) }
     var newClipText by remember { mutableStateOf("") }
 
-    // History items list
+    // History items list loaded persistently from local disk storage
     var history by remember {
-        mutableStateOf(getInitialSampleClips())
+        mutableStateOf(ClipboardStorageManager.loadHistory(context))
+    }
+
+    // Auto-save history whenever history state changes
+    LaunchedEffect(history) {
+        ClipboardStorageManager.saveHistory(context, history)
     }
 
     // Capture clip from system clipboard
@@ -452,7 +461,7 @@ fun ClipboardManagerScreen(
                             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                         )
                         Text(
-                            text = if (searchQuery.isNotBlank()) "No clips matching search" else "Clipboard history empty",
+                            text = if (searchQuery.isNotBlank()) "No clips matching search" else "No saved clipboard items yet.\nCopy anything on your device to track it here!",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
@@ -496,7 +505,7 @@ fun ClipboardManagerScreen(
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
             title = { Text("Clear Clipboard History?") },
-            text = { Text("This will remove all unpinned items from your clipboard timeline.") },
+            text = { Text("This will remove all unpinned items from your persistent clipboard timeline.") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -1088,6 +1097,98 @@ private fun ClipboardItemCard(
     }
 }
 
+// Persistent Storage Manager on Local Disk
+private object ClipboardStorageManager {
+    private const val FILE_NAME = "mono_clipboard_history.json"
+
+    fun loadHistory(context: Context): List<ClipboardItem> {
+        return try {
+            val file = File(context.filesDir, FILE_NAME)
+            if (!file.exists()) return emptyList()
+
+            val jsonString = file.readText()
+            val jsonArray = JSONArray(jsonString)
+            val items = mutableListOf<ClipboardItem>()
+
+            for (i in 0 until jsonArray.length()) {
+                val obj = jsonArray.getJSONObject(i)
+                val id = obj.optString("id", UUID.randomUUID().toString())
+                val content = obj.optString("content", "")
+                val typeName = obj.optString("type", ClipType.TEXT.name)
+                val type = try { ClipType.valueOf(typeName) } catch (e: Exception) { ClipType.TEXT }
+                val timestamp = obj.optLong("timestamp", System.currentTimeMillis())
+                val isPinned = obj.optBoolean("isPinned", false)
+                val isMasked = obj.optBoolean("isMasked", type == ClipType.OTP)
+                val otpCode = if (obj.has("otpCode")) obj.optString("otpCode") else null
+                val imageUriStr = if (obj.has("imageUri")) obj.optString("imageUri") else null
+                val extraMetadata = if (obj.has("extraMetadata")) obj.optString("extraMetadata") else null
+
+                val imageUri = imageUriStr?.let { Uri.parse(it) }
+                val imageFile = File(context.filesDir, "clip_images/$id.jpg")
+                val bitmap = if (imageFile.exists()) {
+                    BitmapFactory.decodeFile(imageFile.absolutePath)
+                } else if (imageUri != null) {
+                    loadBitmapFromUri(context, imageUri)
+                } else null
+
+                items.add(
+                    ClipboardItem(
+                        id = id,
+                        content = content,
+                        type = type,
+                        timestamp = timestamp,
+                        isPinned = isPinned,
+                        isMasked = isMasked,
+                        otpCode = otpCode,
+                        imageUri = imageUri,
+                        bitmap = bitmap,
+                        extraMetadata = extraMetadata
+                    )
+                )
+            }
+            items
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveHistory(context: Context, history: List<ClipboardItem>) {
+        try {
+            val jsonArray = JSONArray()
+            val imagesDir = File(context.filesDir, "clip_images").apply { mkdirs() }
+
+            for (item in history) {
+                val obj = JSONObject()
+                obj.put("id", item.id)
+                obj.put("content", item.content)
+                obj.put("type", item.type.name)
+                obj.put("timestamp", item.timestamp)
+                obj.put("isPinned", item.isPinned)
+                obj.put("isMasked", item.isMasked)
+                if (item.otpCode != null) obj.put("otpCode", item.otpCode)
+                if (item.imageUri != null) obj.put("imageUri", item.imageUri.toString())
+                if (item.extraMetadata != null) obj.put("extraMetadata", item.extraMetadata)
+
+                if (item.bitmap != null) {
+                    val imageFile = File(imagesDir, "${item.id}.jpg")
+                    if (!imageFile.exists()) {
+                        FileOutputStream(imageFile).use { out ->
+                            item.bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                        }
+                    }
+                }
+
+                jsonArray.put(obj)
+            }
+
+            val file = File(context.filesDir, FILE_NAME)
+            file.writeText(jsonArray.toString())
+        } catch (e: Exception) {
+            // Handle error silently
+        }
+    }
+}
+
 // Parse text content and automatically determine ClipType
 private fun parseClipboardText(text: String): ClipboardItem {
     // 1. Check for OTP / Sensitive Codes (e.g. "code is 849201", "OTP: 123456", 4-8 digit standalone numbers)
@@ -1151,51 +1252,6 @@ private fun parseClipboardText(text: String): ClipboardItem {
     return ClipboardItem(
         content = text,
         type = ClipType.TEXT
-    )
-}
-
-// Initial Sample Clips showcasing rich features
-private fun getInitialSampleClips(): List<ClipboardItem> {
-    return listOf(
-        ClipboardItem(
-            content = "Your Mono verification passcode is 849201. Valid for 5 minutes.",
-            type = ClipType.OTP,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 2, // 2 mins ago
-            isPinned = true,
-            isMasked = true,
-            otpCode = "849201",
-            extraMetadata = "SENSITIVE VERIFICATION CODE"
-        ),
-        ClipboardItem(
-            content = "https://github.com/android/architecture-components-samples",
-            type = ClipType.LINK,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 15, // 15 mins ago
-            isPinned = true,
-            extraMetadata = "github.com"
-        ),
-        ClipboardItem(
-            content = "val localDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())\nprintln(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))",
-            type = ClipType.CODE,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 45, // 45 mins ago
-            extraMetadata = "Kotlin Code"
-        ),
-        ClipboardItem(
-            content = "support@awras.com",
-            type = ClipType.EMAIL,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 120, // 2 hours ago
-            extraMetadata = "EMAIL ADDRESS"
-        ),
-        ClipboardItem(
-            content = "+1 (555) 234-5678",
-            type = ClipType.PHONE,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 240, // 4 hours ago
-            extraMetadata = "PHONE NUMBER"
-        ),
-        ClipboardItem(
-            content = "Project sprint review meeting is scheduled for Friday at 3:00 PM EST.",
-            type = ClipType.TEXT,
-            timestamp = System.currentTimeMillis() - 1000 * 60 * 360 // 6 hours ago
-        )
     )
 }
 

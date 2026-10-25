@@ -139,7 +139,7 @@ fun TimeZoneScreen(
             DatumToolTopBar(
                 title = "Time Zone",
                 description = "Global Timezone Inspector & Converter",
-                icon = TablerIcons.Clock,
+                icon = androidx.compose.material.icons.Icons.Default.Public,
                 onBackClick = onBackClick,
                 rightActionIcon = if (is24HourFormat) Icons.Default.Schedule else Icons.Default.AccessTime,
                 onRightActionClick = {

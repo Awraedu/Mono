@@ -1,10 +1,11 @@
 package com.awras.mono.features.tools.audio
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GraphicEq
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Activity
-import compose.icons.tablericons.Clock
 import compose.icons.tablericons.Music
 import compose.icons.tablericons.Volume
 import compose.icons.tablericons.WaveSine
@@ -35,7 +36,7 @@ val audioTools = listOf(
         name = "Metronome",
         description = "Precision Audio Tempo Engine with Tap Tempo & Pendulum",
         tagline = "TEMPO ENGINE",
-        icon = TablerIcons.Clock,
+        icon = Icons.Default.GraphicEq,
         category = ToolCategory.AUDIO,
         route = "metronome",
         content = { onBackClick -> MetronomeScreen(onBackClick = onBackClick) }
