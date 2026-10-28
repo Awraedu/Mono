@@ -1,12 +1,15 @@
 package com.awras.mono.features.tools.productivity
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.Timer
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ClipboardList
+import compose.icons.tablericons.DeviceMobile
 import compose.icons.tablericons.Lock
+import compose.icons.tablericons.Plus
 
 val productivityTools = listOf(
     Tool(
@@ -38,5 +41,35 @@ val productivityTools = listOf(
         category = ToolCategory.PRODUCTIVITY,
         route = "chrono",
         content = { onBackClick -> ChronoScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "stepper-tally",
+        name = "Stepper",
+        description = "Tactile Multi-Counter & Tally Engine with Custom Step Sizes",
+        tagline = "TALLY COUNTER",
+        icon = TablerIcons.Plus,
+        category = ToolCategory.PRODUCTIVITY,
+        route = "stepper_tally",
+        content = { onBackClick -> StepperScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "hardware-inspector",
+        name = "Hardware",
+        description = "System & Hardware Inspector with Real-time Diagnostics",
+        tagline = "SYSTEM MANAGER",
+        icon = TablerIcons.DeviceMobile,
+        category = ToolCategory.PRODUCTIVITY,
+        route = "hardware_inspector",
+        content = { onBackClick -> HardwareScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "random-flip-dice",
+        name = "Random",
+        description = "Physics 3D Coin Flip & Multi-Dice Rolling Engine",
+        tagline = "COIN & DICE",
+        icon = Icons.Outlined.Casino,
+        category = ToolCategory.PRODUCTIVITY,
+        route = "random_flip_dice",
+        content = { onBackClick -> RandomScreen(onBackClick = onBackClick) }
     )
 )
