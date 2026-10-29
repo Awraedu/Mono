@@ -342,7 +342,7 @@ fun ConverterScreen(
                             text = inputString,
                             style = MaterialTheme.typography.displayMedium,
                             fontWeight = FontWeight.Black,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = com.awras.mono.ui.theme.GeistMono,
                             color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             fontSize = if (inputString.length > 8) 28.sp else 38.sp
@@ -419,7 +419,7 @@ fun ConverterScreen(
                             text = convertedResultString,
                             style = MaterialTheme.typography.displayMedium,
                             fontWeight = FontWeight.Black,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = com.awras.mono.ui.theme.GeistMono,
                             color = vibrantOrange,
                             maxLines = 1,
                             fontSize = if (convertedResultString.length > 8) 28.sp else 38.sp

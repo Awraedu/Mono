@@ -138,7 +138,7 @@ fun DiscountCalculatorScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.Top
         ) {
             // ==================== 1. SUMMARY HERO CARD ====================
             Surface(
@@ -221,7 +221,7 @@ fun DiscountCalculatorScreen(
                         text = currencyFormat.format(finalTotalPriceWithTax),
                         style = MaterialTheme.typography.displayMedium,
                         fontWeight = FontWeight.Black,
-                        fontFamily = FontFamily.Monospace,
+                        fontFamily = com.awras.mono.ui.theme.GeistMono,
                         color = MaterialTheme.colorScheme.onSurface,
                         letterSpacing = (-1).sp
                     )
@@ -262,6 +262,8 @@ fun DiscountCalculatorScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             // ==================== 2. PRICE & DISCOUNT INPUT READOUT CARD ====================
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -288,7 +290,7 @@ fun DiscountCalculatorScreen(
                             text = "$$originalPriceStr",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = com.awras.mono.ui.theme.GeistMono,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -305,12 +307,14 @@ fun DiscountCalculatorScreen(
                             text = "${primaryDisc.toInt()}% OFF",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = com.awras.mono.ui.theme.GeistMono,
                             color = vibrantOrange
                         )
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             // ==================== 3. PERCENTAGE PRESET PILLS ====================
             LazyRow(
@@ -335,7 +339,10 @@ fun DiscountCalculatorScreen(
                 }
             }
 
-            // ==================== 4. SPACIOUS TACTILE NUMPAD GRID ====================
+            // PUSH NUMPAD ALL THE WAY DOWN TO THE BOTTOM OF THE SCREEN
+            Spacer(modifier = Modifier.weight(1f))
+
+            // ==================== 4. EVEN SPACIOUS NUMPAD GRID (ALIGNED AT BOTTOM) ====================
             val keypadGrid = listOf(
                 "7", "8", "9", "AC",
                 "4", "5", "6", "DEL",
@@ -345,8 +352,8 @@ fun DiscountCalculatorScreen(
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(keypadGrid) { key ->
@@ -360,7 +367,7 @@ fun DiscountCalculatorScreen(
                             else -> MaterialTheme.colorScheme.surface
                         },
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
-                        modifier = Modifier.height(58.dp)
+                        modifier = Modifier.height(56.dp)
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -368,7 +375,7 @@ fun DiscountCalculatorScreen(
                         ) {
                             Text(
                                 text = key,
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = when {
                                     isAction -> MaterialTheme.colorScheme.error

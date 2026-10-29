@@ -238,7 +238,7 @@ fun ScientificCalculatorScreen(
                         Text(
                             text = expression.ifBlank { "0" },
                             style = MaterialTheme.typography.titleMedium,
-                            fontFamily = FontFamily.Monospace,
+                            fontFamily = com.awras.mono.ui.theme.GeistMono,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             maxLines = 2,
                             fontSize = if (expression.length > 20) 16.sp else 20.sp
@@ -265,7 +265,7 @@ fun ScientificCalculatorScreen(
                                 text = resultText,
                                 style = MaterialTheme.typography.displayMedium,
                                 fontWeight = FontWeight.Black,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = com.awras.mono.ui.theme.GeistMono,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = if (resultText.length > 12) 28.sp else 38.sp
                             )

@@ -206,7 +206,7 @@ fun BaseConverterScreen(
                                 text = valStr,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.Monospace,
+                                fontFamily = com.awras.mono.ui.theme.GeistMono,
                                 color = if (isActive) vibrantOrange else MaterialTheme.colorScheme.onSurface,
                                 fontSize = if (valStr.length > 20) 14.sp else 18.sp
                             )

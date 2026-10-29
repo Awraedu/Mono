@@ -6,7 +6,9 @@ import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Binary
+import compose.icons.tablericons.BuildingBank
 import compose.icons.tablericons.Calculator
+import compose.icons.tablericons.Percentage
 import compose.icons.tablericons.Tag
 
 val mathsTools = listOf(
@@ -49,5 +51,25 @@ val mathsTools = listOf(
         category = ToolCategory.MATHS,
         route = "discount_calculator",
         content = { onBackClick -> DiscountCalculatorScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "percent-ratio",
+        name = "Percent",
+        description = "Ratio, Proportions & Percentage Change Engine",
+        tagline = "RATIO ENGINE",
+        icon = TablerIcons.Percentage,
+        category = ToolCategory.MATHS,
+        route = "percent_ratio",
+        content = { onBackClick -> PercentScreen(onBackClick = onBackClick) }
+    ),
+    Tool(
+        id = "loan-emi",
+        name = "Loan",
+        description = "Equated Monthly Installment (EMI) & Amortization Analytics",
+        tagline = "EMI ANALYTICS",
+        icon = TablerIcons.BuildingBank,
+        category = ToolCategory.MATHS,
+        route = "loan_emi",
+        content = { onBackClick -> LoanScreen(onBackClick = onBackClick) }
     )
 )
