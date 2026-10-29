@@ -2,9 +2,9 @@ package com.awras.mono.features.tools.measurement
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SquareFoot
-import androidx.compose.material3.Text
 import com.awras.mono.core.model.Tool
 import com.awras.mono.core.model.ToolCategory
+import com.awras.mono.features.tools.maths.ConverterScreen
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Activity
 import compose.icons.tablericons.Anchor
@@ -77,11 +77,11 @@ val measurementTools = listOf(
     Tool(
         id = "unit-converter",
         name = "Converter",
-        description = "Convert between various units of measurement",
+        description = "Universal Unit Scale & Dimensional Converter with Built-in Numpad",
         tagline = "UNIT SCALE",
         icon = Icons.Default.SquareFoot,
         category = ToolCategory.MEASUREMENT,
         route = "unit_converter",
-        content = { Text("Unit Converter Tool") }
+        content = { onBackClick -> ConverterScreen(onBackClick = onBackClick) }
     )
 )
